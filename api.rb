@@ -3,8 +3,9 @@ require 'plaid'
 require 'clearbit'
 require 'logger'
 
-# Handler of the app logic
 LOG = Logger.new(STDOUT)
+
+# Handler of the app logic
 class API
   attr_reader :public_token, :access_token, :domains
 
@@ -42,7 +43,8 @@ class API
   def fetch_domains(companies)
     companies ||= @transactions.map(&name)
     query = companies.uniq # to avoid repeated queries
-    query = @domains.keys - query # cache, only retrieve new companies
+    query -= @domains.keys # cache, only retrieve new companies
+    LOG.debug("Fetching info for #{query.length} companies")
     @domains = query.map { |name| [name, Clearbit::NameDomain.find(name: name)] }.to_h
   end
 
