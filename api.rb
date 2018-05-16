@@ -1,14 +1,18 @@
+require 'pry'
 require 'plaid'
 require 'clearbit'
+require 'logger'
 
 # Handler of the app logic
+LOG = Logger.new(STDOUT)
 class API
-  attr_reader :public_token, :access_token
+  attr_reader :public_token, :access_token, :domains
 
   def initialize(plaid_credentials:, clearbit_key:)
     @public_token = ''
     @access_token = ''
     @transactions = []
+    @domains      = {}
 
     Clearbit.key = clearbit_key
 
@@ -19,6 +23,7 @@ class API
 
   def transactions
     @transactions = @plaid.transactions.get(@access_token, 6.months.ago, Date.today)
+    binding.pry
     @transactions
   end
 
@@ -31,13 +36,21 @@ class API
   end
 
   def logged_in?
-    @access_token.empty?
+    !@access_token.empty?
+  end
+
+  def fetch_domains(companies)
+    companies ||= @transactions.map(&name)
+    query = companies.uniq # to avoid repeated queries
+    query = @domains.keys - query # cache, only retrieve new companies
+    @domains = query.map { |name| [name, Clearbit::NameDomain.find(name: name)] }.to_h
   end
 
   private
+
   def process_transactions
     # Name to domains
     # Clearbit.NameDomain.
-    # Then, use Enrich API
+    # Then, use Enrich AP
   end
 end

@@ -11,6 +11,8 @@ gem 'activesupport'
 
 group :test do
     gem 'rspec'
+    gem "factory_bot", "~> 4.0"
+    gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
 end
 group :development do
     gem 'rubocop', require: false

@@ -56,6 +56,9 @@ class InterviewApp < Sinatra::Base
     response.to_json
   end
 
+#   get '/transactions/:transaction_id/info' do
+#   end
+
   post '/get_access_token' do
     begin
       response = APP_API.generate_access_token(params['public_token'])
