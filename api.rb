@@ -50,6 +50,7 @@ class API
     query -= @domains.keys # cache, only retrieve new companies
     LOG.debug("Fetching info for #{query.length} companies")
     @domains.merge!(query.map { |name| [name, domain_lookup(name)] }.to_h)
+    File.write('domains.json', @domains.to_json)
     LOG.debug(@domains)
     @domains
   end

@@ -29,7 +29,7 @@ class InterviewApp < Sinatra::Base
       puts "#{'#' * 10} RELOADED #{'#' * 10}"
     end
   end
-  before '/transactions' do
+  before '/transactions*' do
     response.headers['Access-Control-Allow-Origin'] = '*'
     content_type :json
 
@@ -42,10 +42,24 @@ class InterviewApp < Sinatra::Base
     200
   end
 
+  get '/companies/:name' do
+    transactions = JSON.parse(File.read('transactions.json'))['transactions']
+    APP_API.transactions = transactions
+    APP_API.domains = JSON.parse(File.read('domains.json'))
+    APP_API.companies = JSON.parse(File.read('companies.json'))
+    company = APP_API.company_info(params['name'])
+
+    halt 404, 'Company not found' unless company
+
+    return company.to_json
+  end
+
   # Routes
   get '/transactions' do
     begin
-      response = APP_API.transactions
+      response = APP_API.transactions()
+      APP_API.fetch_domains()
+      APP_API.enrich_domains()
     rescue Plaid::ItemError, Plaid::InvalidInputError, Plaid::InvalidRequestError => e
       response = { error: { error_code: e.error_code, error_message: e.error_message } }
       halt 400, response.to_json
