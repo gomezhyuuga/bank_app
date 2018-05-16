@@ -19,6 +19,10 @@ describe API do
       expect(@api).to respond_to(method)
     end
   end
+
+  subject { @api }
+  it { is_expected.to respond_to(:company_info).with(1).argument }
+
   context 'when not logged in' do
     describe '#logged_in?' do
       it { expect(@api.logged_in?).to eq false }
@@ -46,6 +50,19 @@ describe API do
         @api.enrich_domains()
         expect(@api.companies).not_to be_empty
         expect(@api.companies).to include(*@names)
+      end
+    end
+
+    describe '#company_info' do
+      it 'retrieves information for an existing company' do
+        company = 'United Airlines'
+        @api.fetch_domains()
+        @api.enrich_domains()
+        info = @api.company_info(company)
+
+        expect(info).to be_truthy
+        # Just test for few attributes present
+        %i[id name domain description logo].each { |key| expect(info).to have_key(key) }
       end
     end
   end
