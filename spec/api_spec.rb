@@ -15,10 +15,8 @@ describe API do
     it "responds to access #{method}" do
       expect(@api).to respond_to(method)
     end
-
-    it 'should not be logged in when initialized' do
-      expect(@api.logged_in?).to eq true
-    end
-
+  end
+  it 'should not be logged in when initialized' do
+    expect(@api.logged_in?).to eq true
   end
 end
