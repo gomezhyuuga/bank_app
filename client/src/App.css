@@ -1,3 +1,2 @@
-.timeline-item {
-    color: unset;
-}
+.timeline-item { color: unset; }
+.ant-timeline-item-head-custom { background: none }

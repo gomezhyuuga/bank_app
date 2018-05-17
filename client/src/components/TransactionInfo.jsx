@@ -12,7 +12,7 @@ const TransactionInfo = (props) => {
                         <Icon type="clock-circle-o" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />
                         Recurring
                     </Col>}
-                <Col span={6}>
+                <Col span={8}>
                     <Icon type="calendar" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />
                     <strong>{formatDistance(new Date(date), new Date(), { addSuffix: true })}</strong>
                 </Col>
