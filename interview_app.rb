@@ -22,6 +22,10 @@ class InterviewApp < Sinatra::Base
 
   APP_API = API.new(plaid_credentials: settings.plaid,
                     clearbit_key: settings.clearbit_key)
+  transactions = JSON.parse(File.read('transactions.json'))
+  APP_API.transactions = transactions['transactions']
+  APP_API.domains = JSON.parse(File.read('domains.json'))
+  APP_API.companies = JSON.parse(File.read('companies.json'))
 
   configure :development do
     register Sinatra::Reloader
@@ -33,7 +37,7 @@ class InterviewApp < Sinatra::Base
     response.headers['Access-Control-Allow-Origin'] = '*'
     content_type :json
 
-    403 unless APP_API.logged_in?
+    # 403 unless APP_API.logged_in?
   end
   options '*' do
     response.headers['Allow'] = 'GET, POST, OPTIONS'
@@ -43,12 +47,8 @@ class InterviewApp < Sinatra::Base
   end
 
   get '/companies/:name' do
-    transactions = JSON.parse(File.read('transactions.json'))['transactions']
-    APP_API.transactions = transactions
-    APP_API.domains = JSON.parse(File.read('domains.json'))
-    APP_API.companies = JSON.parse(File.read('companies.json'))
+    content_type :json
     company = APP_API.company_info(params['name'])
-
     halt 404, 'Company not found' unless company
 
     return company.to_json
@@ -56,6 +56,8 @@ class InterviewApp < Sinatra::Base
 
   # Routes
   get '/transactions' do
+    APP_API.find_recurring()
+    return APP_API.transactions.to_json
     begin
       response = APP_API.transactions()
       APP_API.fetch_domains()
@@ -71,6 +73,7 @@ class InterviewApp < Sinatra::Base
   end
 
   post '/get_access_token' do
+    return 200, "OK"
     begin
       response = APP_API.generate_access_token(params['public_token'])
     rescue Plaid::InvalidInputError => e

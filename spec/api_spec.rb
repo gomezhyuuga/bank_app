@@ -14,7 +14,7 @@ describe API do
   end
 
   %i[access_token public_token transactions logged_in?
-     domains fetch_domains companies].each do |method|
+     domains fetch_domains companies find_recurring].each do |method|
     it "responds to access #{method}" do
       expect(@api).to respond_to(method)
     end
@@ -22,6 +22,29 @@ describe API do
 
   subject { @api }
   it { is_expected.to respond_to(:company_info).with(1).argument }
+
+  describe '#find_recurring' do
+    it 'identifies recurring transactions' do
+      recurrings = %w[ex02 ex03 ex04 ex05 ex06 ex07]
+      @api.transactions = JSON.parse([
+        { id: 'xx01', date: '2018-05-20', amount: 312, name: 'Something 1' },
+        { id: 'ex01', date: '2018-05-17', amount: 300, name: 'Sample not recurring' },
+        { id: 'xx02', date: '2018-05-20', amount: 201, name: 'Something 2' },
+        { id: 'ex02', date: '2018-05-15', amount: 444, name: 'Sample recurring' },
+        { id: 'ex03', date: '2018-04-15', amount: 444, name: 'Sample recurring' },
+        { id: 'xx03', date: '2018-05-20', amount: 201, name: 'Something 3' },
+        { id: 'ex04', date: '2018-03-15', amount: 444, name: 'Sample recurring' },
+        { id: 'ex05', date: '2018-01-10', amount: 123, name: 'Sample recurring change year' },
+        { id: 'xx04', date: '2017-12-20', amount: 201, name: 'Something 4' },
+        { id: 'ex06', date: '2017-12-10', amount: 123, name: 'Sample recurring change year' },
+        { id: 'xx05', date: '2017-11-19', amount: 201, name: 'Something 5' },
+        { id: 'ex07', date: '2017-11-10', amount: 123, name: 'Sample recurring change year' }
+      ].to_json)
+      expect(@api.find_recurring).to include(*recurrings)
+      lst = @api.transactions.select { |t| recurrings.include? t['id'] }
+      lst.each { |t| expect(t).to include('recurring' => true) }
+    end
+  end
 
   context 'when not logged in' do
     describe '#logged_in?' do

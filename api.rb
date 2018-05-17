@@ -2,6 +2,11 @@ require 'pry'
 require 'plaid'
 require 'clearbit'
 require 'logger'
+require 'set'
+
+require 'active_support'
+require 'active_support/core_ext/numeric/time'
+require 'active_support/core_ext/integer/time'
 
 LOG = Logger.new(STDOUT)
 
@@ -26,7 +31,7 @@ class API
   end
 
   def transactions
-    @transactions = @plaid.transactions.get(@access_token, 6.months.ago, Date.today)
+    # @transactions = @plaid.transactions.get(@access_token, 6.months.ago, Date.today)
     @transactions
   end
 
@@ -71,7 +76,38 @@ class API
     @companies[company_name]
   end
 
+  def find_recurring
+    date_index = @transactions.group_by { |t| t['date'] }
+    recurring = Set.new
+    @transactions.each do |t|
+      date  = Date.parse(t['date'])
+      prev  = date.months_ago(1).to_s
+      match = find_match(t, date_index[prev])
+
+      next unless match
+
+      match['recurring'] = true
+      t['recurring']     = true
+      recurring << t['id']
+      recurring << match['id']
+    end
+
+    recurring.to_a
+  end
+
   private
+
+  def find_match(transaction, list)
+    return unless list
+    list.find do |x|
+      x_day = Date.parse(x['date']).mday
+      t_day = Date.parse(transaction['date']).mday
+
+      x['amount'] == transaction['amount'] &&
+        x['name'] == transaction['name'] &&
+        x_day == t_day
+    end
+  end
 
   def domain_lookup(company)
     Clearbit::NameDomain.find(name: company)
