@@ -29,14 +29,14 @@ const CompanyInfo = (props) => {
 
     return (
         <React.Fragment>
-        <Row>
-            <Divider>Company</Divider>
+        <Divider>Company</Divider>
+        <Row type='flex' justify='space-between'>
             <h1>
                 <Avatar src={logo} style={{marginRight: 16, verticalAlign: 'middle'}}>{name}</Avatar>
                 <a href={`http://${domain}`}>{name}</a>
                 <Divider type='vertical' />
-                {phone && <Button size='large' ghost type='primary' icon='phone'>{phone}</Button>}
             </h1>
+            {phone && <Button size='large' ghost type='primary' icon='phone'>{phone}</Button>}
         </Row>
         <Row type='flex' align='middle'>
             <Col span={12}>
