@@ -1,34 +1,23 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {List, Button, Tag, Icon} from 'antd'
-import formatMoney from 'accounting-js/lib/formatMoney.js'
+import TransactionListItem from './TransactionListItem'
+import {List} from 'antd'
 
 class TransactionList extends Component {
     render() {
-        const {transactions} = this.props;
-        const _more_info = <Button type='primary'>Details<Icon type="right-circle-o" /></Button>;
+        const {transactions, onShowDetails} = this.props;
         return (<div>
             <h1>Total transactions: {transactions.length}</h1>
-            <List
-                bordered
-                dataSource={transactions}
+            <List bordered dataSource={transactions}
                 header="Transactions"
-                renderItem={item => {
-                    const {id, name, date, amount} = item;
-                    const amount_str = formatMoney(amount);
-                    const tags       = item.category.map(a => <Tag>{a}</Tag>)
-                    return  <List.Item key={id} actions={[date, _more_info]}>
-                                <List.Item.Meta title={name} description={tags}/>
-                                <strong style={{alignSelf: 'center' }}>{amount_str}</strong>
-                            </List.Item>;
-                }}>
+                renderItem={item =>  <TransactionListItem {...item} onClick={onShowDetails} /> }>
             </List>
-            </div>
-        );
+            </div>);
     }
 }
 
 TransactionList.propTypes = {
-    transactions: PropTypes.array.isRequired
+    transactions: PropTypes.array.isRequired,
+    onShowDetails: PropTypes.func
 }
 export default TransactionList;
