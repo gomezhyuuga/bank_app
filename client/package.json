@@ -25,6 +25,7 @@
   "devDependencies": {
     "babel-plugin-import": "^1.7.0",
     "babel-plugin-transform-optional-chaining": "^7.0.0-beta.3",
+    "react-app-rewire-lodash": "^2.0.0",
     "react-app-rewired": "^1.5.2"
   }
 }
