@@ -86,7 +86,9 @@ const CompanyInfo = (props) => {
         <Divider orientation='left'><h5>TECHNOLOGIES</h5></Divider>
         <Row type='flex'>
             {props.tech.map((tech, i) => <Tag style={{marginBottom: 8}} key={tech} color={_get_color(i)}>
+                                            <a href={`https://www.google.com.mx/search?q=${startCase(tech)}`}>
                                             {startCase(tech)}
+                                            </a>
                                          </Tag>)}
         </Row>
         <Divider orientation='left'><h5>DETAILS</h5></Divider>

@@ -7,9 +7,8 @@ class TransactionList extends Component {
     render() {
         const {transactions, onShowDetails} = this.props;
         return (<div>
-            <h1>Total transactions: {transactions.length}</h1>
             <List bordered dataSource={transactions}
-                header="Transactions"
+                header={<h3>Transactions <small>({transactions.length})</small></h3>}
                 renderItem={item =>  <TransactionListItem {...item} onClick={onShowDetails} /> }>
             </List>
             </div>);
