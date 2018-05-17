@@ -6,7 +6,12 @@ import { formatDistance } from 'date-fns'
 const TransactionInfo = (props) => {
     const {date, amount} = props;
 
-    return <Row type='flex'>
+    return <Row type='flex' justify='center'>
+                {props.recurring &&
+                    <Col span={6} style={{color: '#f5222d'}}>
+                        <Icon type="clock-circle-o" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />
+                        Recurring
+                    </Col>}
                 <Col span={6}>
                     <Icon type="calendar" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />
                     <strong>{formatDistance(new Date(date), new Date(), { addSuffix: true })}</strong>

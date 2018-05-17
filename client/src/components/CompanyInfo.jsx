@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Row, Col, Avatar, Divider, Button} from 'antd'
-import {startCase} from 'lodash'
+import {Row, Col, Avatar, Divider, Tag, Button} from 'antd'
+import {startCase, shuffle} from 'lodash'
+import formatMoney from 'accounting-js/lib/formatMoney'
+import formatNumber from 'accounting-js/lib/formatNumber'
 
 const _build_map = (geo) => {
     const {lat, lng} = geo;
@@ -21,11 +23,15 @@ const _build_social_btn = (network, info, icon = network) => {
             icon={icon}
             shape='circle' />
 }
+const COLORS = shuffle("pink, magenta, red, volcano, orange, gold, cyan, lime, green, blue, geekblue, purple".split(','));
+const _get_color = (index) => {
+    return COLORS[index % COLORS.length].trim();
+}
 
 const CompanyInfo = (props) => {
     const {logo, name, description, domain, phone}  = props;
     const {facebook, linkedin, twitter, crunchbase} = props;
-    const {location, timeZone, geo, category}       = props;
+    const {location, timeZone, geo, category, tags} = props;
 
     return (
         <React.Fragment>
@@ -52,24 +58,49 @@ const CompanyInfo = (props) => {
             </Row>
             </Col>
         </Row>
-        <Divider orientation='left'>Location</Divider>
+        <Row>
+            {tags.map((tag, i) => <Tag key={tag} color={_get_color(i)}>{tag}</Tag>)}
+        </Row>
+        <Divider orientation='left'><h5>LOCATION</h5></Divider>
         <Row gutter={16}>
             <Col span={12}>
                 <p>{location}</p>
-                <Divider orientation='left'>Timezone</Divider>
+                <Divider orientation='left'><h5> TIMEZONE </h5></Divider>
                 <p>{timeZone}</p>
             </Col>
             <Col span={12}>
                 { _build_map(geo) }
             </Col>
         </Row>
-        <Divider orientation='left'>Details</Divider>
+        <Divider orientation='left'><h5>METRICS</h5></Divider>
+        <Row type='flex' justify='space-between'>
+            {Object.entries(props.metrics).map( ([key, val]) => {
+                if (val && key === 'annualRevenue')  val = formatMoney(val, { precision: 0 });
+                else if (val && key === 'employees') val = formatNumber(val, { precision: 0 });
+
+                return <Col span={5} key={key}>
+                            <h6>{startCase(key)}</h6>
+                            <p>{val || "N/A"}</p>
+                        </Col>})}
+        </Row>
+        <Divider orientation='left'><h5>TECHNOLOGIES</h5></Divider>
         <Row type='flex'>
+            {props.tech.map((tech, i) => <Tag style={{marginBottom: 8}} key={tech} color={_get_color(i)}>
+                                            {startCase(tech)}
+                                         </Tag>)}
+        </Row>
+        <Divider orientation='left'><h5>DETAILS</h5></Divider>
+        <Row type='flex' justify='space-between'>
+            <Col span={5}>
+                <h6>Founded Year</h6>
+                <p>{props.foundedYear}</p>
+            </Col>
             {Object.entries(category).map( ([key, val]) =>
             <Col span={5} key={key}>
                 <h6>{startCase(key)}</h6>
                 <p>{val}</p>
             </Col>)}
+            <Col span={5}></Col>
         </Row>
     </React.Fragment>);
 }

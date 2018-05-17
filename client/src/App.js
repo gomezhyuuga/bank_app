@@ -96,7 +96,7 @@ class App extends Component {
         </div>
       </Content>
       </Layout>
-      <Sider width='50%' style={{ overflow: 'auto', padding: 24, height: '100vh', position: 'fixed', right: 0 }}>
+      <Sider breakpoint='md' collapsedWidth={520} width='50%' style={{ overflow: 'auto', padding: '64px 24px', height: '100vh', position: 'fixed', right: 0 }}>
               {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
         </Sider>
     </Layout>
