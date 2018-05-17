@@ -46,7 +46,7 @@ const CompanyInfo = (props) => {
         </Row>
         <Row type='flex' align='middle'>
             <Col span={12}>
-            <small>{props.legalName}</small>
+            <small> {props.legalName}</small>
             <p>{description}</p>
             </Col>
             <Col span={12}>
@@ -87,7 +87,7 @@ const CompanyInfo = (props) => {
         <Row type='flex'>
             {props.tech.map((tech, i) => <Tag style={{marginBottom: 8}} key={tech} color={_get_color(i)}>
                                             <a href={`https://www.google.com.mx/search?q=${startCase(tech)}`}>
-                                            {startCase(tech)}
+                                            <small>{startCase(tech).toLocaleUpperCase()}</small>
                                             </a>
                                          </Tag>)}
         </Row>
