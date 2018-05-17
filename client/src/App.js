@@ -2,19 +2,20 @@ import {hot} from 'react-hot-loader'
 import React, {Component} from 'react'
 import {Layout, Menu} from 'antd'
 import { Row, Col } from 'antd';
-import axios from 'axios'
 import Plaid from './components/Plaid'
 import TransactionList from './components/TransactionList'
 import './App.css'
+import DetailsCard from './components/DetailsCard';
+import API from './API';
 
-const API = axios.create({ baseURL: "http://localhost:4567/api" });
-
-const {Header, Content} = Layout;
+const {Header, Content, Sider} = Layout;
 
 class App extends Component {
   state = {
     loggedIn: false,
     public_token: undefined,
+    details: undefined,
+    selectedTransaction: undefined,
     transactions: []
   }
 
@@ -39,6 +40,20 @@ class App extends Component {
         .then(this.getTransactions);
     });
   }
+  showDetails = (transaction) => {
+    const company = transaction.name;
+
+    API.get(`/companies/${company}`)
+      .then(({data}) => {
+        console.log("Transaction", transaction);
+        console.log("Details", data);
+
+        this.setState({
+          selectedTransaction: transaction,
+          details: data
+        });
+      }).catch(error => this.setState({selectedTransaction: transaction, details: null}));
+  }
   componentDidMount() {
     const public_token = sessionStorage.getItem('public_token');
 
@@ -52,11 +67,14 @@ class App extends Component {
   getTransactions = async() => {
     const response = await API.get('/transactions');
     console.log(response);
-    const transactions = (response.data && response.data.transactions) || [];
+    const transactions = response.data || [];
     this.setState({transactions});
   }
   render() {
+    const {selectedTransaction, details} = this.state;
+
     return <Layout>
+      <Layout>
       <Header>
         <Menu theme="dark" mode="horizontal">
           <Menu.Item>
@@ -66,17 +84,21 @@ class App extends Component {
           </Menu.Item>
         </Menu>
       </Header>
-      <Content>
-        <h1>Hello world!</h1>
-        <Row>
-          <Col span={16}>
-            {this.state.loggedIn ? <TransactionList transactions={this.state.transactions} /> : <div>You must login</div>}
-          </Col>
-          <Col span={8}>
-            <h1>Transaction information</h1>
-          </Col>
-        </Row>
+      <Content style={{ padding: '0 50px' }}>
+        <div style={{ padding: 24, minHeight: 280 }}>
+          <Row gutter={16}>
+            <Col span={12}>
+              {this.state.loggedIn
+                ? <TransactionList transactions={this.state.transactions} onShowDetails={this.showDetails} />
+                : <div>You must login</div>}
+            </Col>
+          </Row>
+        </div>
       </Content>
+      </Layout>
+      <Sider width='50%' style={{ overflow: 'auto', padding: 24, height: '100vh', position: 'fixed', right: 0 }}>
+              {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
+        </Sider>
     </Layout>
   }
 }
