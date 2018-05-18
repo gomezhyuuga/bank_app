@@ -1,7 +1,7 @@
 import {hot} from 'react-hot-loader'
 import React, {Component} from 'react'
 import {Layout, Menu} from 'antd'
-import { Row, Col } from 'antd';
+import { Row, Col, Spin } from 'antd';
 import Plaid from './components/Plaid'
 import TransactionList from './components/TransactionList'
 import './App.css'
@@ -16,6 +16,7 @@ class App extends Component {
     details: undefined,
     selectedTransaction: undefined,
     count: 10,
+    loading: true,
     transactions: []
   }
 
@@ -76,41 +77,49 @@ class App extends Component {
     const response = await fetch(`/transactions?offset=${offset}&count=${count}`);
     try {
       const transactions = (await response.json()) || [];
-      this.setState({transactions: [...this.state.transactions, ...transactions]});
+      this.setState({
+        transactions: [...this.state.transactions, ...transactions],
+        loading: false
+      });
     } catch (error) { }
   }
   render() {
-    const {selectedTransaction, details} = this.state;
+    const {selectedTransaction, details, loading, loggedIn} = this.state;
+
+    let content = <div>You must login</div>;
+    if (loggedIn && loading) {
+      content = <Spin spinning={loading} id='loading' tip='Loading transactions...' size='large' />;
+    } else if (loggedIn && !loading) {
+      content = <TransactionList
+          transactions={this.state.transactions}
+          onLoadMore={this.getTransactions}
+          onShowDetails={this.showDetails} />;
+    }
 
     return <Layout>
       <Layout>
-      <Header>
-        <Menu theme="dark" mode="horizontal">
-          <Menu.Item>
-            <div>
-              <Plaid handleOnSuccess={this.plaidLogin} />
-            </div>
-          </Menu.Item>
-        </Menu>
-      </Header>
-      <Content style={{ padding: '0 50px' }}>
-        <div style={{ padding: 24, minHeight: 280 }}>
-          <Row gutter={16}>
-            <Col span={12}>
-              {this.state.loggedIn
-                ? <TransactionList
-                    transactions={this.state.transactions}
-                    onLoadMore={this.getTransactions}
-                    onShowDetails={this.showDetails} />
-                : <div>You must login</div>}
-            </Col>
-          </Row>
-        </div>
-      </Content>
+        <Header>
+          <Menu theme="dark" mode="horizontal">
+            <Menu.Item>
+              <div>
+                <Plaid handleOnSuccess={this.plaidLogin} />
+              </div>
+            </Menu.Item>
+          </Menu>
+        </Header>
+        <Content style={{ padding: '0 50px', marginRight: '50%' }}>
+          <div style={{ padding: 24, minHeight: 280,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            display: 'flex' }}>
+            {content}
+          </div>
+        </Content>
       </Layout>
-      <Sider breakpoint='md' collapsedWidth={520} width='50%' style={{ overflow: 'auto', padding: '64px 24px', height: '100vh', position: 'fixed', right: 0 }}>
+      <Sider breakpoint='md' collapsedWidth={520} width='50%' style={{ overflow: 'auto',
+        padding: '64px 24px', height: '100vh', position: 'fixed', right: 0 }}>
               {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
-        </Sider>
+      </Sider>
     </Layout>
   }
 }
