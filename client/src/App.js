@@ -1,6 +1,6 @@
 import {hot} from 'react-hot-loader'
 import React, {Component} from 'react'
-import {Spin, Layout, Alert} from 'antd'
+import {Spin, Layout, Alert, message} from 'antd'
 import Plaid from './components/Plaid'
 import TransactionList from './components/TransactionList'
 import './App.css'
@@ -36,9 +36,11 @@ class App extends Component {
       });
       if (response.status !== 200) throw response;
       sessionStorage.setItem('public_token', public_token);
+      message.success("Sucessfully logged in.")
       return response;
     } catch (error) {
       this.resetToken();
+      message.error("Error while logging in.")
       throw error;
     }
   }
