@@ -1,3 +1,4 @@
 .timeline-item { color: unset; }
 .timeline-header * { color: gray }
 .ant-timeline-item-head-custom { background: none }
+#company_details { margin-top: 16px }

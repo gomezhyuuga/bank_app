@@ -34,6 +34,7 @@ class App extends Component {
         },
         body: JSON.stringify({public_token})
       });
+      if (response.status !== 200) throw response;
       sessionStorage.setItem('public_token', public_token);
       return response;
     } catch (error) {
@@ -69,10 +70,6 @@ class App extends Component {
     });
   }
 
-  loadMoreTransactions = () => {
-    console.log('Loading more transactions...');
-    this.getTransactions();
-  }
   getTransactions = async () => {
     const offset   = this.state.transactions.length;
     const count    = this.state.count;
@@ -103,7 +100,7 @@ class App extends Component {
               {this.state.loggedIn
                 ? <TransactionList
                     transactions={this.state.transactions}
-                    onLoadMore={this.loadMoreTransactions}
+                    onLoadMore={this.getTransactions}
                     onShowDetails={this.showDetails} />
                 : <div>You must login</div>}
             </Col>

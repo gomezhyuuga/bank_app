@@ -50,7 +50,7 @@ class API
     @public_token     = public_token
     exchange_response = @plaid.item.public_token.exchange(@public_token)
     @access_token     = exchange_response.access_token
-    puts "access token: #{@access_token}"
+    LOG.info "access token: #{@access_token}"
     exchange_response
   end
 

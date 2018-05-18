@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Card, Divider} from 'antd'
+import {Card, Divider, Alert} from 'antd'
 import CompanyInfo from './CompanyInfo';
 import TransactionInfo from './TransactionInfo';
 
@@ -20,7 +20,14 @@ class DetailsCard extends Component {
                     <TransactionInfo {...transaction} />
                     {details
                     ? <CompanyInfo {...details} />
-                    : <h2 id="company_details">No info for this company</h2>}
+                    : <div id="company_details">
+                        <Alert showIcon message="No company information"
+                            description={<p>
+                                    We were unable to find details for the company
+                                    <strong> {transaction.name}.</strong>
+                                </p>}
+                            type="info" />
+                      </div>}
                 </Card>;
     }
 }
