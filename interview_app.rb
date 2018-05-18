@@ -22,10 +22,10 @@ class InterviewApp < Sinatra::Base
 
   APP_API = API.new(plaid_credentials: settings.plaid,
                     clearbit_key: settings.clearbit_key)
-  transactions = JSON.parse(File.read('transactions.json'))
-  APP_API.transactions = transactions['transactions']
-  APP_API.domains = JSON.parse(File.read('domains.json'))
-  APP_API.companies = JSON.parse(File.read('companies.json'))
+  # transactions = JSON.parse(File.read('transactions.json'))
+  # APP_API.transactions = transactions['transactions']
+  # APP_API.domains = JSON.parse(File.read('domains.json'))
+  # APP_API.companies = JSON.parse(File.read('companies.json'))
 
   configure :development do
     register Sinatra::Reloader
@@ -37,7 +37,7 @@ class InterviewApp < Sinatra::Base
     response.headers['Access-Control-Allow-Origin'] = '*'
     content_type :json
 
-    # 403 unless APP_API.logged_in?
+    403 unless APP_API.logged_in?
   end
   options '*' do
     response.headers['Allow'] = 'GET, POST, OPTIONS'
@@ -56,29 +56,21 @@ class InterviewApp < Sinatra::Base
 
   # Routes
   get '/transactions' do
-    APP_API.find_recurring()
-    return APP_API.transactions.to_json
     begin
-      response = APP_API.transactions()
-      APP_API.fetch_domains()
-      APP_API.enrich_domains()
+      response = APP_API.transactions
     rescue Plaid::ItemError, Plaid::InvalidInputError, Plaid::InvalidRequestError => e
       response = { error: { error_code: e.error_code, error_message: e.error_message } }
       halt 400, response.to_json
     end
 
-    File.write('transactions.json', response.to_json)
-
     response.to_json
   end
 
   post '/get_access_token' do
-    return 200, "OK"
     begin
       response = APP_API.generate_access_token(params['public_token'])
     rescue Plaid::InvalidInputError => e
       puts e.inspect
-      # binding.pry
       halt 400, { error: { error_code: e.error_code, error_message: e.error_message } }.to_json
     end
 
