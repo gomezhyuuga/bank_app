@@ -19,6 +19,9 @@ class InterviewApp < Sinatra::Base
   # Settings
   config_file 'config.yml'
   set :sessions, true
+  set :public_folder, 'client/build'
+  set :views, 'client/build'
+  set :server, :puma
 
   APP_API = API.new(plaid_credentials: settings.plaid,
                     clearbit_key: settings.clearbit_key)
@@ -40,6 +43,10 @@ class InterviewApp < Sinatra::Base
     response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type, Accept, X-User-Email, X-Auth-Token, access-control-allow-origin,content-type'
     response.headers['Access-Control-Allow-Origin'] = '*'
     200
+  end
+
+  get '/' do
+    render :html, :index
   end
 
   get '/companies/:name' do
