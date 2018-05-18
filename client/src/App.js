@@ -1,7 +1,6 @@
 import {hot} from 'react-hot-loader'
 import React, {Component} from 'react'
-import {Layout, Menu} from 'antd'
-import { Row, Col, Spin } from 'antd';
+import {Spin, Layout, Alert} from 'antd'
 import Plaid from './components/Plaid'
 import TransactionList from './components/TransactionList'
 import './App.css'
@@ -86,7 +85,17 @@ class App extends Component {
   render() {
     const {selectedTransaction, details, loading, loggedIn} = this.state;
 
-    let content = <div>You must login</div>;
+    let content = <div>
+      <Alert
+        message="Unauthenticated"
+        description={<div>
+          You must log in to use the application.
+          <Plaid handleOnSuccess={this.plaidLogin} />
+          </div>}
+        type="warning"
+        showIcon
+      />
+    </div>;
     if (loggedIn && loading) {
       content = <Spin spinning={loading} id='loading' tip='Loading transactions...' size='large' />;
     } else if (loggedIn && !loading) {
@@ -98,14 +107,8 @@ class App extends Component {
 
     return <Layout>
       <Layout>
-        <Header>
-          <Menu theme="dark" mode="horizontal">
-            <Menu.Item>
-              <div>
-                <Plaid handleOnSuccess={this.plaidLogin} />
-              </div>
-            </Menu.Item>
-          </Menu>
+        <Header id='header'>
+            <h2>Clearbit Interview Project</h2>
         </Header>
         <Content style={{ padding: '0 50px', marginRight: '50%' }}>
           <div style={{ padding: 24, minHeight: 280,
