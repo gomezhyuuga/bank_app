@@ -24,9 +24,16 @@ class App extends Component {
   }
   generateAccessToken = async (public_token) => {
     try {
-      const response = await fetch('/get_access_token', { method: 'POST', body: {public_token}});
+      console.log("PUBLIC TOKEN", public_token)
+      const response = await fetch('/get_access_token', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({public_token})
+      });
       sessionStorage.setItem('public_token', public_token);
-      console.log(response)
       return response;
     } catch (error) {
       this.resetToken();
@@ -45,8 +52,6 @@ class App extends Component {
     fetch(`/companies/${company}`)
       .then( async (response) => {
         const data = await response.json();
-        console.log("Transaction", transaction);
-        console.log("Details", data);
 
         this.setState({
           selectedTransaction: transaction,
@@ -57,18 +62,21 @@ class App extends Component {
   componentDidMount() {
     const public_token = sessionStorage.getItem('public_token');
 
-    console.log("PUBLIC TOKEN", public_token);
     if (public_token) this.setState({public_token, loggedIn: true}, () => {
       this.generateAccessToken(public_token)
         .then(this.getTransactions);
     });
   }
 
-  getTransactions = async() => {
+  loadMoreTransactions = () => {
+    console.log('Loading more transactions...');
+  }
+  getTransactions = async () => {
     const response = await fetch('/transactions');
-    const transactions = (await response.json()) || [];
-    console.log(transactions);
-    this.setState({transactions});
+    try {
+      const transactions = (await response.json()) || [];
+      this.setState({transactions});
+    } catch (error) { }
   }
   render() {
     const {selectedTransaction, details} = this.state;
@@ -89,7 +97,10 @@ class App extends Component {
           <Row gutter={16}>
             <Col span={12}>
               {this.state.loggedIn
-                ? <TransactionList id='transaction_list' transactions={this.state.transactions} onShowDetails={this.showDetails} />
+                ? <TransactionList
+                    transactions={this.state.transactions}
+                    onLoadMore={this.loadMoreTransactions}
+                    onShowDetails={this.showDetails} />
                 : <div>You must login</div>}
             </Col>
           </Row>
@@ -97,7 +108,7 @@ class App extends Component {
       </Content>
       </Layout>
       <Sider breakpoint='md' collapsedWidth={520} width='50%' style={{ overflow: 'auto', padding: '64px 24px', height: '100vh', position: 'fixed', right: 0 }}>
-              {selectedTransaction && <DetailsCard id='details' transaction={selectedTransaction} details={details} />}
+              {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
         </Sider>
     </Layout>
   }

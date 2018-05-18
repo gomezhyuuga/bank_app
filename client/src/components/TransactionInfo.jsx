@@ -6,7 +6,7 @@ import { formatDistance } from 'date-fns'
 const TransactionInfo = (props) => {
     const {date, amount} = props;
 
-    return <Row type='flex' justify='center'>
+    return <Row type='flex' justify='center' id="transaction_details">
                 {props.recurring &&
                     <Col span={6} style={{color: '#f5222d'}}>
                         <Icon type="clock-circle-o" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />

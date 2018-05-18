@@ -8,11 +8,19 @@ class DetailsCard extends Component {
     state = { loading: true }
     render() {
         const {transaction, details} = this.props;
+        const title = <div>
+                Transaction Details
+                <Divider type='vertical' />
+                <small>{transaction.date}</small>
+            </div>;
 
-        return <Card title={<div>Transaction Details <Divider type='vertical' /><small>{transaction.date}</small></div>}
+        return <Card id='details'
+                title={title}
                 style={{ width: '100%' }}>
                     <TransactionInfo {...transaction} />
-                    {details && <CompanyInfo {...details} />}
+                    {details
+                    ? <CompanyInfo {...details} />
+                    : <h2 id="company_details">No info for this company</h2>}
                 </Card>;
     }
 }

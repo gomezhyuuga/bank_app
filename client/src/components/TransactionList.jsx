@@ -1,10 +1,9 @@
 import _ from 'lodash'
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {List, Button, Icon, Timeline, Row, Col} from 'antd'
+import {Button, Icon, Timeline, Row, Col} from 'antd'
 import formatColumn from 'accounting-js/lib/formatColumn'
 import { format } from 'date-fns'
-import TransactionListItem from './TransactionListItem'
 
 class TransactionList extends Component {
     onClick(transaction) {
@@ -34,6 +33,10 @@ class TransactionList extends Component {
                 </Timeline.Item>;
         });
     }
+    _loadMore = () => {
+        console.log('Loading more transactions');
+        if (this.props.onLoadMore) this.props.onLoadMore();
+    }
     render() {
         const {transactions} = this.props;
         const amounts = formatColumn(transactions.map(t => t.amount));
@@ -50,13 +53,18 @@ class TransactionList extends Component {
 
         return  <React.Fragment>
                     <h2>Transactions <small>({items.length})</small></h2>
-                    <Timeline>{items}</Timeline>
+                    <Timeline id='transaction_list'>{items}</Timeline>
+                    <div style={{textAlign: 'center' }}>
+                        <Button loading={this.props.loading} onClick={this._loadMore}>Load more</Button>
+                    </div>
                 </React.Fragment>
     }
 }
 
 TransactionList.propTypes = {
     transactions: PropTypes.array.isRequired,
-    onShowDetails: PropTypes.func
+    onShowDetails: PropTypes.func,
+    loading: PropTypes.bool,
+    onLoadMore: PropTypes.func
 }
 export default TransactionList;

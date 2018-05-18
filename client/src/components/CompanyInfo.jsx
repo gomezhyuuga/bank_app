@@ -34,7 +34,7 @@ const CompanyInfo = (props) => {
     const {location, timeZone, geo, category, tags} = props;
 
     return (
-        <React.Fragment>
+    <div id="company_details">
         <Divider>Company</Divider>
         <Row type='flex' justify='space-between'>
             <h1>
@@ -104,7 +104,7 @@ const CompanyInfo = (props) => {
             </Col>)}
             <Col span={5}></Col>
         </Row>
-    </React.Fragment>);
+    </div>);
 }
 
 CompanyInfo.propTypes = {
