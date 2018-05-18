@@ -1,7 +1,6 @@
 require 'rspec'
 require 'yaml'
 require 'json'
-require 'faker'
 require_relative '../API'
 
 # Tests for the API
@@ -27,21 +26,21 @@ describe API do
     it 'identifies recurring transactions' do
       recurrings = %w[ex02 ex03 ex04 ex05 ex06 ex07]
       @api.transactions = JSON.parse([
-        { id: 'xx01', date: '2018-05-20', amount: 312, name: 'Something 1' },
-        { id: 'ex01', date: '2018-05-17', amount: 300, name: 'Sample not recurring' },
-        { id: 'xx02', date: '2018-05-20', amount: 201, name: 'Something 2' },
-        { id: 'ex02', date: '2018-05-15', amount: 444, name: 'Sample recurring' },
-        { id: 'ex03', date: '2018-04-15', amount: 444, name: 'Sample recurring' },
-        { id: 'xx03', date: '2018-05-20', amount: 201, name: 'Something 3' },
-        { id: 'ex04', date: '2018-03-15', amount: 444, name: 'Sample recurring' },
-        { id: 'ex05', date: '2018-01-10', amount: 123, name: 'Sample recurring change year' },
-        { id: 'xx04', date: '2017-12-20', amount: 201, name: 'Something 4' },
-        { id: 'ex06', date: '2017-12-10', amount: 123, name: 'Sample recurring change year' },
-        { id: 'xx05', date: '2017-11-19', amount: 201, name: 'Something 5' },
-        { id: 'ex07', date: '2017-11-10', amount: 123, name: 'Sample recurring change year' }
+        { transaction_id: 'xx01', date: '2018-05-20', amount: 312, name: 'Something 1' },
+        { transaction_id: 'ex01', date: '2018-05-17', amount: 300, name: 'Sample not recurring' },
+        { transaction_id: 'xx02', date: '2018-05-20', amount: 201, name: 'Something 2' },
+        { transaction_id: 'ex02', date: '2018-05-15', amount: 444, name: 'Sample recurring' },
+        { transaction_id: 'ex03', date: '2018-04-15', amount: 444, name: 'Sample recurring' },
+        { transaction_id: 'xx03', date: '2018-05-20', amount: 201, name: 'Something 3' },
+        { transaction_id: 'ex04', date: '2018-03-15', amount: 444, name: 'Sample recurring' },
+        { transaction_id: 'ex05', date: '2018-01-10', amount: 123, name: 'Sample recurring change year' },
+        { transaction_id: 'xx04', date: '2017-12-20', amount: 201, name: 'Something 4' },
+        { transaction_id: 'ex06', date: '2017-12-10', amount: 123, name: 'Sample recurring change year' },
+        { transaction_id: 'xx05', date: '2017-11-19', amount: 201, name: 'Something 5' },
+        { transaction_id: 'ex07', date: '2017-11-10', amount: 123, name: 'Sample recurring change year' }
       ].to_json)
       expect(@api.find_recurring).to include(*recurrings)
-      lst = @api.transactions.select { |t| recurrings.include? t['id'] }
+      lst = @api.transactions.select { |t| recurrings.include? t['transaction_id'] }
       lst.each { |t| expect(t).to include('recurring' => true) }
     end
   end
@@ -49,6 +48,28 @@ describe API do
   context 'when not logged in' do
     describe '#logged_in?' do
       it { expect(@api.logged_in?).to eq false }
+    end
+    describe '#transactions' do
+      context 'when no offset' do
+        it 'returns a list of 10 transactions' do
+          @api.transactions = @transactions
+          expect(@api.transactions.length).to eq 10
+        end
+      end
+      context 'when offset provided' do
+        it 'returns the next 10 transactions' do
+          id_mapper = ->(x) { x['transaction_id'] }
+          @api.transactions = @transactions
+          count = 10
+          ids = @api.transactions.map(&id_mapper)
+          expected_ids = @transactions.map(&id_mapper)
+          expect(ids.length).to eq 10
+          expect(ids).to include(*expected_ids[0...count])
+          ids = @api.transactions(offset: 10, count: 10).map(&id_mapper)
+          expect(ids.length).to eq 10
+          expect(ids).to include(*expected_ids[count...(count * 2)])
+        end
+      end
     end
   end
 
