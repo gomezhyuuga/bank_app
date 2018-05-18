@@ -8,6 +8,8 @@ require 'active_support'
 require 'active_support/core_ext/numeric/time'
 require 'active_support/core_ext/integer/time'
 
+require_relative 'lib/plaid/models/transaction'
+
 LOG = Logger.new(STDOUT)
 
 # Handler of the app logic
@@ -30,8 +32,17 @@ class API
                                secret: secret, public_key: public_key)
   end
 
-  def transactions
-    # @transactions = @plaid.transactions.get(@access_token, 6.months.ago, Date.today)
+  def transactions(offset: 0, count: 10)
+    data = @transactions.empty? ? fetch_transactions() : @transactions
+    data[offset...(offset + count)]
+  end
+
+  def fetch_transactions
+    @transactions = @plaid.transactions.get(@access_token, 6.months.ago, Date.today)
+    @transactions = @transactions['transactions']
+    find_recurring()
+    fetch_domains()
+    enrich_domains()
     @transactions
   end
 
@@ -55,7 +66,6 @@ class API
     query -= @domains.keys # cache, only retrieve new companies
     LOG.debug("Fetching info for #{query.length} companies")
     @domains.merge!(query.map { |name| [name, domain_lookup(name)] }.to_h)
-    File.write('domains.json', @domains.to_json)
     LOG.debug(@domains)
     @domains
   end
@@ -77,6 +87,8 @@ class API
   end
 
   def find_recurring
+    return if @transactions.empty?
+
     date_index = @transactions.group_by { |t| t['date'] }
     recurring = Set.new
     @transactions.each do |t|
@@ -88,8 +100,8 @@ class API
 
       match['recurring'] = true
       t['recurring']     = true
-      recurring << t['id']
-      recurring << match['id']
+      recurring << t['transaction_id']
+      recurring << match['transaction_id']
     end
 
     recurring.to_a

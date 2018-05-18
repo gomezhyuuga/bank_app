@@ -1,11 +1,3 @@
-GIT
-  remote: https://github.com/stympy/faker.git
-  revision: 886ea3e1f25567526aaf064cc0b120680b55b3fe
-  branch: master
-  specs:
-    faker (1.8.7)
-      i18n (>= 0.7)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -14,9 +6,23 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     ast (2.4.0)
     backports (3.11.3)
     byebug (10.0.2)
+    capybara (3.1.0)
+      addressable
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      xpath (~> 3.0)
+    capybara-screenshot (1.0.21)
+      capybara (>= 1.0, < 4)
+      launchy
+    childprocess (0.9.0)
+      ffi (~> 1.0, >= 1.0.11)
     clearbit (0.2.8)
       nestful (~> 1.1.0)
     coderay (1.1.2)
@@ -25,21 +31,26 @@ GEM
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (0.10.3)
     diff-lcs (1.3)
-    factory_bot (4.8.2)
-      activesupport (>= 3.0.0)
     faraday (0.15.1)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
+    ffi (1.9.23)
     hashie (3.5.7)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     method_source (0.9.0)
+    mini_mime (1.0.0)
+    mini_portile2 (2.3.0)
     minitest (5.11.3)
     multi_json (1.13.1)
     multipart-post (2.0.0)
     mustermann (1.0.2)
     nestful (1.1.3)
+    nokogiri (1.8.2)
+      mini_portile2 (~> 2.3.0)
     parallel (1.12.1)
     parser (2.5.1.0)
       ast (~> 2.4.0)
@@ -54,13 +65,15 @@ GEM
     pry-byebug (3.6.0)
       byebug (~> 10.0)
       pry (~> 0.10)
+    public_suffix (3.0.2)
+    puma (3.11.4)
     rack (2.0.5)
     rack-contrib (2.0.1)
       rack (~> 2.0)
     rack-protection (2.0.1)
       rack
-    rack-proxy (0.6.4)
-      rack
+    rack-test (1.0.0)
+      rack (>= 1.0, < 3)
     rainbow (3.0.0)
     rake (12.3.1)
     rspec (3.7.0)
@@ -86,6 +99,10 @@ GEM
     ruby-debug-ide (0.6.1)
       rake (>= 0.8.1)
     ruby-progressbar (1.9.0)
+    rubyzip (1.2.1)
+    selenium-webdriver (3.12.0)
+      childprocess (~> 0.5)
+      rubyzip (~> 1.2)
     sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -104,23 +121,26 @@ GEM
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unicode-display_width (1.3.2)
+    xpath (3.0.0)
+      nokogiri (~> 1.8)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   activesupport
+  capybara
+  capybara-screenshot
   clearbit
   debase
-  factory_bot (~> 4.0)
-  faker!
   plaid
   pry-byebug
+  puma
   rack-contrib
-  rack-proxy
   rspec
   rubocop
   ruby-debug-ide
+  selenium-webdriver
   sinatra
   sinatra-contrib
   sinatra-cors
