@@ -52,7 +52,7 @@ class TransactionList extends Component {
         }).value();
 
         return  <React.Fragment>
-                    <h2>Transactions <small>({items.length})</small></h2>
+                    <h2>Transactions <small>({transactions.length})</small></h2>
                     <Timeline id='transaction_list'>{items}</Timeline>
                     <div style={{textAlign: 'center' }}>
                         <Button loading={this.props.loading} onClick={this._loadMore}>Load more</Button>

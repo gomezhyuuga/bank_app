@@ -22,10 +22,6 @@ class InterviewApp < Sinatra::Base
 
   APP_API = API.new(plaid_credentials: settings.plaid,
                     clearbit_key: settings.clearbit_key)
-  # transactions = JSON.parse(File.read('transactions.json'))
-  # APP_API.transactions = transactions['transactions']
-  # APP_API.domains = JSON.parse(File.read('domains.json'))
-  # APP_API.companies = JSON.parse(File.read('companies.json'))
 
   configure :development do
     register Sinatra::Reloader
@@ -56,8 +52,10 @@ class InterviewApp < Sinatra::Base
 
   # Routes
   get '/transactions' do
+    count  = params['count'].to_i
+    offset = params['offset'].to_i
     begin
-      response = APP_API.transactions
+      response = APP_API.transactions(offset: offset, count: count)
     rescue Plaid::ItemError, Plaid::InvalidInputError, Plaid::InvalidRequestError => e
       response = { error: { error_code: e.error_code, error_message: e.error_message } }
       halt 400, response.to_json

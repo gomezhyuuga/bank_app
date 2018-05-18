@@ -15,6 +15,7 @@ class App extends Component {
     public_token: undefined,
     details: undefined,
     selectedTransaction: undefined,
+    count: 10,
     transactions: []
   }
 
@@ -70,12 +71,15 @@ class App extends Component {
 
   loadMoreTransactions = () => {
     console.log('Loading more transactions...');
+    this.getTransactions();
   }
   getTransactions = async () => {
-    const response = await fetch('/transactions');
+    const offset   = this.state.transactions.length;
+    const count    = this.state.count;
+    const response = await fetch(`/transactions?offset=${offset}&count=${count}`);
     try {
       const transactions = (await response.json()) || [];
-      this.setState({transactions});
+      this.setState({transactions: [...this.state.transactions, ...transactions]});
     } catch (error) { }
   }
   render() {
