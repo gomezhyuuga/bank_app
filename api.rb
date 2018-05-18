@@ -88,6 +88,7 @@ class API
 
   def find_recurring
     return if @transactions.empty?
+    LOG.debug('Finding recurring transactions...')
 
     date_index = @transactions.group_by { |t| t['date'] }
     recurring = Set.new
@@ -104,6 +105,7 @@ class API
       recurring << match['transaction_id']
     end
 
+    LOG.debug("Found #{recurring.length} recurring transactions.")
     recurring.to_a
   end
 
