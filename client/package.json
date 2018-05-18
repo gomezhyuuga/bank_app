@@ -4,7 +4,7 @@
   "private": true,
   "proxy": "http://localhost:4567",
   "dependencies": {
-    "accounting-js": "^1.1.1",
+    "accounting": "^0.4.1",
     "antd": "^3.5.2",
     "axios": "^0.18.0",
     "date-fns": "^2.0.0-alpha.8",

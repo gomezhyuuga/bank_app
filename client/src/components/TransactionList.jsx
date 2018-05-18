@@ -2,14 +2,14 @@ import _ from 'lodash'
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Icon, Timeline, Row, Col} from 'antd'
-import formatColumn from 'accounting-js/lib/formatColumn'
+import {formatColumn} from 'accounting'
 import { format } from 'date-fns'
 
 class TransactionList extends Component {
     onClick(transaction) {
         if (this.props.onShowDetails) this.props.onShowDetails(transaction);
     }
-    _build_items(transactions, amounts) {
+    _build_items(transactions) {
         return transactions.map((t, i) => {
             let options = { color: 'blue' }
             if (t.recurring) {
@@ -23,7 +23,7 @@ class TransactionList extends Component {
                             <Col span={4}><small>{t.date}</small></Col>
                             <Col span={12}>{t.name}</Col>
                             <Col span={4} style={{verticalAlign: 'middle'}}>
-                                <pre style={{margin: 0}}>{amounts[i]}</pre>
+                                <pre style={{margin: 0}}>{t.amount_str}</pre>
                             </Col>
                             <Col span={4}>
                                 <Button type='primary' size='small'>Details <Icon type="right-circle-o"/></Button>
@@ -39,7 +39,8 @@ class TransactionList extends Component {
     }
     render() {
         const {transactions} = this.props;
-        const amounts = formatColumn(transactions.map(t => t.amount));
+        const columns = formatColumn(transactions.map(t => t.amount));
+        columns.forEach((val, i) => transactions[i].amount_str = val);
 
         const items = _(transactions)
                         .groupBy('date')
@@ -48,7 +49,7 @@ class TransactionList extends Component {
                                     dot={<Icon type='calendar' />}>
                                         {format(date, 'PPPP')}
                                     </Timeline.Item>;
-            return [date_header, ...this._build_items(lst, amounts)];
+            return [date_header, ...this._build_items(lst)];
         }).value();
 
         return  <React.Fragment>

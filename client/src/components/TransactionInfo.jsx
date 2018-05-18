@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Row, Col, Icon} from 'antd'
-import formatMoney from 'accounting-js/lib/formatMoney.js'
+import {formatMoney} from 'accounting'
 import { formatDistance } from 'date-fns'
 const TransactionInfo = (props) => {
     const {date, amount} = props;

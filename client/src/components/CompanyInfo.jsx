@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Row, Col, Avatar, Divider, Tag, Button} from 'antd'
 import {startCase, shuffle} from 'lodash'
-import formatMoney from 'accounting-js/lib/formatMoney'
-import formatNumber from 'accounting-js/lib/formatNumber'
+import {formatMoney} from 'accounting'
+import {formatNumber} from 'accounting'
 
 const _build_map = (geo) => {
     const {lat, lng} = geo;
