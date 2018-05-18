@@ -78,6 +78,8 @@ class API
     response = query.map { |name| enrich(name, @domains[name]) }
     @companies.merge!(response.map { |x| [x[:company], x[:info]] }.to_h)
     LOG.debug("#{@companies.length} companies enriched!")
+    LOG.debug(@companies.keys)
+    LOG.debug('Sample:')
     LOG.debug(@companies.first)
     @companies
   end

@@ -17,6 +17,7 @@
     "react-plaid-link": "^1.0.2",
     "react-scripts": "1.1.4"
   },
+  "homepage": "https://clearbit-gh.herokuapp.com/",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
