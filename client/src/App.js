@@ -6,7 +6,6 @@ import Plaid from './components/Plaid'
 import TransactionList from './components/TransactionList'
 import './App.css'
 import DetailsCard from './components/DetailsCard';
-import API from './API';
 
 const {Header, Content, Sider} = Layout;
 
@@ -25,7 +24,8 @@ class App extends Component {
   }
   generateAccessToken = async (public_token) => {
     try {
-      const response = await API.post('/get_access_token', {public_token});
+      const response = await fetch('/get_access_token', { method: 'POST', body: {public_token}});
+      sessionStorage.setItem('public_token', public_token);
       console.log(response)
       return response;
     } catch (error) {
@@ -34,7 +34,6 @@ class App extends Component {
     }
   }
   plaidLogin = (public_token, metadata) => {
-    sessionStorage.setItem('public_token', public_token);
     this.setState({public_token, loggedIn: true}, () => {
       this.generateAccessToken(public_token)
         .then(this.getTransactions);
@@ -43,8 +42,9 @@ class App extends Component {
   showDetails = (transaction) => {
     const company = transaction.name;
 
-    API.get(`/companies/${company}`)
-      .then(({data}) => {
+    fetch(`/companies/${company}`)
+      .then( async (response) => {
+        const data = await response.json();
         console.log("Transaction", transaction);
         console.log("Details", data);
 
@@ -65,9 +65,9 @@ class App extends Component {
   }
 
   getTransactions = async() => {
-    const response = await API.get('/transactions');
-    console.log(response);
-    const transactions = response.data || [];
+    const response = await fetch('/transactions');
+    const transactions = (await response.json()) || [];
+    console.log(transactions);
     this.setState({transactions});
   }
   render() {
@@ -89,7 +89,7 @@ class App extends Component {
           <Row gutter={16}>
             <Col span={12}>
               {this.state.loggedIn
-                ? <TransactionList transactions={this.state.transactions} onShowDetails={this.showDetails} />
+                ? <TransactionList id='transaction_list' transactions={this.state.transactions} onShowDetails={this.showDetails} />
                 : <div>You must login</div>}
             </Col>
           </Row>
@@ -97,7 +97,7 @@ class App extends Component {
       </Content>
       </Layout>
       <Sider breakpoint='md' collapsedWidth={520} width='50%' style={{ overflow: 'auto', padding: '64px 24px', height: '100vh', position: 'fixed', right: 0 }}>
-              {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
+              {selectedTransaction && <DetailsCard id='details' transaction={selectedTransaction} details={details} />}
         </Sider>
     </Layout>
   }
