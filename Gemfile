@@ -8,6 +8,7 @@ gem 'plaid'
 gem 'puma'
 gem 'rack-contrib'
 gem 'activesupport'
+gem 'pry-byebug'
 
 group :test do
     gem 'rspec'
@@ -18,5 +19,4 @@ group :development do
     gem 'rubocop', require: false
     gem 'ruby-debug-ide'
     gem 'debase'
-    gem 'pry-byebug'
 end
