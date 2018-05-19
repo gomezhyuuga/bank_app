@@ -18,9 +18,9 @@ class InterviewApp < Sinatra::Base
 
   # Settings
   config_file 'config.yml'
-  enable :sessions, :static
-  set :public_folder, -> { File.join(root, 'client/build') }
-  set :views, -> { File.join(root, 'client/build') }
+  set :sessions, true
+  set :public_folder, 'client/build'
+  set :views, 'client/build'
   set :server, :puma
   APP_API = API.new(plaid_credentials: settings.plaid,
                     clearbit_key: settings.clearbit_key)
