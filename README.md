@@ -39,3 +39,7 @@ __[Capybara][capybara]__  to test basic UI functionality:
 Finished in 49.96 seconds (files took 1.24 seconds to load)
 5 examples, 0 failures
 ```
+
+[clearbit]: https://clearbit.com/
+[capybara]: http://teamcapybara.github.io/capybara/
+[rspec]: http://rspec.info/
