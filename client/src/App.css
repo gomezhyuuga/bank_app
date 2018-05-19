@@ -1,5 +1,8 @@
-.timeline-item { color: unset; }
+.timeline-item { color: unset }
+.timeline-item pre { margin: 0 }
 .timeline-header * { color: gray }
+.timeline-item .amount-field { vertical-align: middle }
+.timeline-item .amount-field.is-positive { color: #52c41a }
 .ant-timeline-item-head-custom { background: none }
 #company_details { margin-top: 16px }
 #header * {

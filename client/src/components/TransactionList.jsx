@@ -16,14 +16,18 @@ class TransactionList extends Component {
                 options.color = 'red';
                 options.dot   = <Icon type='clock-circle-o' />;
             }
-            if (t.amount < 0) options.color = 'green';
+            let className = 'amount-field';
+            if (t.amount < 0) {
+                options.color = 'green';
+                className += ' is-positive';
+            }
             return <Timeline.Item style={{background: 'none'}} key={t.transaction_id} {...options}>
                     <a onClick={this.onClick.bind(this, t)} className='timeline-item'>
                         <Row>
                             <Col span={4}><small>{t.date}</small></Col>
                             <Col span={12}>{t.name}</Col>
-                            <Col span={4} style={{verticalAlign: 'middle'}}>
-                                <pre style={{margin: 0}}>{t.amount_str}</pre>
+                            <Col span={4} className={className}>
+                                <pre>{t.amount_str}</pre>
                             </Col>
                             <Col span={4}>
                                 <Button type='primary' size='small'>Details <Icon type="right-circle-o"/></Button>
