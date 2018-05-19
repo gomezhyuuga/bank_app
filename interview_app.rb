@@ -20,6 +20,7 @@ class InterviewApp < Sinatra::Base
   config_file 'config.yml'
   enable :sessions, :static
   set :public_folder, -> { File.join(root, 'client/build') }
+  set :views, -> { File.join(root, 'client/build') }
   set :server, :puma
   APP_API = API.new(plaid_credentials: settings.plaid,
                     clearbit_key: settings.clearbit_key)
@@ -35,7 +36,7 @@ class InterviewApp < Sinatra::Base
   end
 
   get '/' do
-    send_file File.join(settings.public_folder, 'index.html')
+    render :html, :index
   end
 
   get '/companies/:name' do
