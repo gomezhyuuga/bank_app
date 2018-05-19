@@ -37,6 +37,9 @@ class InterviewApp < Sinatra::Base
   get '/' do
     send_file File.join(settings.public_folder, 'index.html')
   end
+  get '/docs/' do
+    send_file File.join(settings.public_folder, 'docs/index.html')
+  end
 
   get '/companies/:name' do
     content_type :json
