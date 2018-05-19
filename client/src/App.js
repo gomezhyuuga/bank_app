@@ -1,6 +1,6 @@
 import {hot} from 'react-hot-loader'
 import React, {Component} from 'react'
-import {Spin, Layout, Alert, message} from 'antd'
+import {Spin, Layout, Alert, message, Divider, Icon} from 'antd'
 import Plaid from './components/Plaid'
 import TransactionList from './components/TransactionList'
 import './App.css'
@@ -91,7 +91,7 @@ class App extends Component {
       <Alert
         message="Unauthenticated"
         description={<div>
-          You must log in to use the application.
+          You must login to use the application.
           <Plaid handleOnSuccess={this.plaidLogin} />
           </div>}
         type="warning"
@@ -111,6 +111,15 @@ class App extends Component {
       <Layout>
         <Header id='header'>
             <h2>Clearbit Interview Project</h2>
+            <Divider type='vertical' />
+            <a href="summary.pdf">
+              <Icon type='cloud-download' style={{fontSize: 16, marginRight: 8}} />
+              Summary
+             </a>
+            <a href="docs/">
+              <Icon type='copy' style={{fontSize: 16, marginRight: 8}} />
+              Docs
+             </a>
         </Header>
         <Content style={{ padding: '0 50px', marginRight: '50%' }}>
           <div style={{ padding: 24, minHeight: 280,
