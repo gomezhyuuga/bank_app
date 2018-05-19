@@ -5,9 +5,7 @@
 .timeline-item .amount-field.is-positive { color: #52c41a }
 .ant-timeline-item-head-custom { background: none }
 #company_details { margin-top: 16px }
-#header h2 {
-    color: #FFF;
-}
+#header h2 { color: rgba(255, 255, 255, 0.8) }
 #header * {
     display: inline-block;
     margin-bottom: 0;
@@ -15,6 +13,11 @@
 }
 #header a { color: rgba(255, 255, 255, 0.5) }
 #header a:hover { color: rgba(255, 255, 255, 0.8) }
+#header .ant-divider.ant-divider-vertical { background-color: rgba(255, 255, 255, 0.4) }
+#header .header-icon {
+    font-size: 16px;
+    margin-right: 8px;
+}
 .sidebar {
     overflow: auto;
     position: fixed;

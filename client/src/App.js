@@ -113,13 +113,18 @@ class App extends Component {
             <h2>Clearbit Interview Project</h2>
             <Divider type='vertical' />
             <a href="summary.pdf">
-              <Icon type='cloud-download' style={{fontSize: 16, marginRight: 8}} />
+              <Icon type='cloud-download' className='header-icon' />
               Summary
-             </a>
+            </a>
+            <Divider type='vertical' />
             <a href="docs/">
-              <Icon type='copy' style={{fontSize: 16, marginRight: 8}} />
+              <Icon type='copy' className='header-icon' />
               Docs
-             </a>
+            </a>
+            <Divider type='vertical' />
+            <a href="https://gomezhyuuuga.github.io/">
+              &copy; 2018 - Fernando Gómez Herrera
+            </a>
         </Header>
         <Content style={{ paddingLeft: 50, marginRight: '50%' }}>
           <div className='content'>
