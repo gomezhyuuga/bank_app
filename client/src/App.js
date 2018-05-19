@@ -126,13 +126,13 @@ class App extends Component {
               &copy; 2018 - Fernando Gómez Herrera
             </a>
         </Header>
-        <Content style={{ paddingLeft: 50, marginRight: '50%' }}>
+        <Content style={{ paddingLeft: 50, marginRight: '50%', marginTop: 64 }}>
           <div className='content'>
             {content}
           </div>
         </Content>
       </Layout>
-      <Sider className='sidebar' breakpoint='md' collapsedWidth={520} width='50%'>
+      <Sider className='app-sidebar' breakpoint='md' collapsedWidth={400} width='50%'>
         {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
       </Sider>
     </Layout>
