@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Row, Col, Avatar, Divider, Tag, Button} from 'antd'
 import {startCase, shuffle} from 'lodash'
-import {formatMoney} from 'accounting'
-import {formatNumber} from 'accounting'
+import {formatMoney, formatNumber} from 'accounting'
 
 const _build_map = (geo) => {
     const {lat, lng} = geo;
@@ -15,6 +14,7 @@ const _build_map = (geo) => {
             &key=AIzaSyDrP1ajpg3YkYLSmnDUUc8Umdo4xyf5vfU
             &center=${lat},${lng}`} />
 }
+
 const _build_social_btn = (network, info, icon = network) => {
     const handle = info.handle;
     return <Button type='primary'
@@ -23,9 +23,18 @@ const _build_social_btn = (network, info, icon = network) => {
             icon={icon}
             shape='circle' />
 }
+
 const COLORS = shuffle("pink, magenta, red, volcano, orange, gold, cyan, lime, green, blue, geekblue, purple".split(','));
-const _get_color = (index) => {
-    return COLORS[index % COLORS.length].trim();
+const _get_color = (index) => COLORS[index % COLORS.length].trim();
+
+const _format_metric = (key, value) => {
+    if (!value) return;
+
+    const numbers = ['marketCap', 'raised', 'employees'];
+    if (numbers.indexOf(key) !== -1) return formatNumber(value, {precision: 0});
+    if (key === 'annualRevenue')     return formatMoney(value,  {precision: 0});
+
+    return value;
 }
 
 const CompanyInfo = (props) => {
@@ -75,12 +84,9 @@ const CompanyInfo = (props) => {
         <Divider orientation='left'><h5>METRICS</h5></Divider>
         <Row type='flex' justify='space-between'>
             {Object.entries(props.metrics).map( ([key, val]) => {
-                if (val && key === 'annualRevenue')  val = formatMoney(val, { precision: 0 });
-                else if (val && key === 'employees') val = formatNumber(val, { precision: 0 });
-
                 return <Col span={5} key={key}>
                             <h6>{startCase(key)}</h6>
-                            <p>{val || "N/A"}</p>
+                            <p>{_format_metric(key, val) || "N/A"}</p>
                         </Col>})}
         </Row>
         <Divider orientation='left'><h5>TECHNOLOGIES</h5></Divider>
