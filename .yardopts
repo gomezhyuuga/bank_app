@@ -1,0 +1,1 @@
+--no-private -m markdown --protected --plugin yard-sinatra . - README
