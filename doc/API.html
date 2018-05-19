@@ -1158,7 +1158,7 @@ Then it squeezes the string and finally returns the stripped version.</p>
       <pre class="code"><span class="info file"># File 'api.rb', line 129</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_company_info'>company_info</span><span class='lparen'>(</span><span class='id identifier rubyid_company_name'>company_name</span><span class='rparen'>)</span>
-  <span class='ivar'>@companies</span><span class='lbracket'>[</span><span class='id identifier rubyid_clean_name'>clean_name</span><span class='lparen'>(</span><span class='id identifier rubyid_company_name'>company_name</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+  <span class='ivar'>@companies</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_clean_name'>clean_name</span><span class='lparen'>(</span><span class='id identifier rubyid_company_name'>company_name</span><span class='rparen'>)</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1576,7 +1576,7 @@ a sucessfully login</p>
 </div>
 
       <div id="footer">
-  Generated on Sat May 19 04:03:10 2018 by
+  Generated on Sat May 19 04:08:35 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
