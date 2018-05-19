@@ -121,18 +121,14 @@ class App extends Component {
               Docs
              </a>
         </Header>
-        <Content style={{ padding: '0 50px', marginRight: '50%' }}>
-          <div style={{ padding: 24, minHeight: 280,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            display: 'flex' }}>
+        <Content style={{ paddingLeft: 50, marginRight: '50%' }}>
+          <div className='content'>
             {content}
           </div>
         </Content>
       </Layout>
-      <Sider breakpoint='md' collapsedWidth={520} width='50%' style={{ overflow: 'auto',
-        padding: '64px 24px', height: '100vh', position: 'fixed', right: 0 }}>
-              {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
+      <Sider className='sidebar' breakpoint='md' collapsedWidth={520} width='50%'>
+        {selectedTransaction && <DetailsCard transaction={selectedTransaction} details={details} />}
       </Sider>
     </Layout>
   }

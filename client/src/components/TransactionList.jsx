@@ -19,7 +19,7 @@ class TransactionList extends Component {
             let className = 'amount-field';
             if (t.amount < 0) {
                 options.color = 'green';
-                className += ' is-positive';
+                className    += ' is-positive'
             }
             return <Timeline.Item style={{background: 'none'}} key={t.transaction_id} {...options}>
                     <a onClick={this.onClick.bind(this, t)} className='timeline-item'>

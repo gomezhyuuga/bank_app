@@ -9,15 +9,15 @@ const TransactionInfo = (props) => {
     return <Row type='flex' justify='center' id="transaction_details">
                 {props.recurring &&
                     <Col span={6} style={{color: '#f5222d'}}>
-                        <Icon type="clock-circle-o" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />
+                        <Icon type="clock-circle-o" className='info-icon' />
                         Recurring
                     </Col>}
                 <Col span={8}>
-                    <Icon type="calendar" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />
+                    <Icon type="calendar" className='info-icon' />
                     <strong>{formatDistance(new Date(date), new Date(), { addSuffix: true })}</strong>
                 </Col>
                 <Col span={6}>
-                    <Icon type="shopping-cart" style={{marginRight: 8, fontSize: 32, verticalAlign: 'middle'}} />
+                    <Icon type="shopping-cart" className='info-icon' />
                     <strong>{formatMoney(amount)}</strong>
                 </Col>
             </Row>;
