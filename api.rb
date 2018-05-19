@@ -92,8 +92,9 @@ class API
   # Uses Clearbit's Name to Domain API to get the information
   # for each transaction
   def fetch_domains
-    extract_name = ->(x) { x['name'].gsub(/[^A-Za-z\s]/, '') }
-    companies = @transactions.map(&extract_name) unless @transactions.empty?
+    return if @transactions.empty?
+
+    companies = @transactions.map { |t| self.class.clean_name(t['name']) }
 
     query = companies.uniq # to avoid repeated queries
     query -= @domains.keys # cache, only retrieve new companies
@@ -126,7 +127,7 @@ class API
   # @param [String] company_name The name of the company. It should exist in {#companies}
   # @return [Hash] information of the company from Clearbit
   def company_info(company_name)
-    @companies[company_name]
+    @companies[self.class.clean_name(company_name)]
   end
 
   # Finds recurring transactions
@@ -160,6 +161,21 @@ class API
 
     @logger.debug("Found #{recurring.length} recurring transactions.")
     recurring.to_a
+  end
+
+  # Removes special characters from a company name in order
+  # to fetch it from Clearbit Enrich.
+  #
+  # It uses the following gsub expression: `/[^A-Za-z\s]/`
+  # Then it squeezes the string and finally returns the stripped version.
+  #
+  # @param [String] company_name Name of the company as given in a transaction.
+  # @return [String] Company name cleaned
+  def self.clean_name(company_name)
+    name = company_name.gsub(/[^A-Za-z\s]/, '')
+    name.gsub! 'SFPOOL', '' # Hard-coded hack for UberPOOL Transactions
+    name.squeeze! ' ' # Remove double spaces
+    name.strip
   end
 
   private

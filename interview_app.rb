@@ -18,30 +18,20 @@ class InterviewApp < Sinatra::Base
 
   # Settings
   config_file 'config.yml'
-  set :sessions, true
-  set :public_folder, Proc.new { File.join(root, 'client/build') }
+  enable :sessions, :static
+  set :public_folder, -> { File.join(root, 'client/build') }
   set :server, :puma
-
   APP_API = API.new(plaid_credentials: settings.plaid,
                     clearbit_key: settings.clearbit_key)
 
   configure :development do
     register Sinatra::Reloader
-    after_reload do
-      puts "#{'#' * 10} RELOADED #{'#' * 10}"
-    end
   end
+
   before '/transactions*' do
-    response.headers['Access-Control-Allow-Origin'] = '*'
     content_type :json
 
     403 unless APP_API.logged_in?
-  end
-  options '*' do
-    response.headers['Allow'] = 'GET, POST, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type, Accept, X-User-Email, X-Auth-Token, access-control-allow-origin,content-type'
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    200
   end
 
   get '/' do
@@ -56,7 +46,12 @@ class InterviewApp < Sinatra::Base
     return company.to_json
   end
 
-  # Routes
+  # Receives optional parameters
+  # @param [number] count how many transactions retrieve per batch
+  # @param [number] offset index to start fetching (to paginate results)
+  # @see https://plaid.com/docs/api/#transactions to know the attributes of each record
+  # @see API#transactions
+  # @return [Array] a list of transactions
   get '/transactions' do
     count  = params['count'].to_i
     offset = params['offset'].to_i
@@ -70,6 +65,12 @@ class InterviewApp < Sinatra::Base
     response.to_json
   end
 
+  # Generates an access token for Plaid
+  # @param [public_token] [string] a public_token obtained from a Plaid successful login
+  # @see https://plaid.com/docs/api/#api-keys-and-access
+  #
+  # @return [string, error] `access_token` if the connection is made successfully,
+  #   `{ error: { error_code, error_message }}` otherwise.
   post '/get_access_token' do
     begin
       response = APP_API.generate_access_token(params['public_token'])

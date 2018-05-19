@@ -73,12 +73,21 @@ describe API do
     end
   end
 
-  describe 'Clearbit integration' do
-    before :all do
-      @api.transactions = @transactions
-      extract_name = ->(x) { x['name'].gsub(/[^A-Za-z\s]/, '') }
-      @names = @transactions.map(&extract_name).uniq
+  before :all do
+    @api.transactions = @transactions
+    @names = @transactions.map { |x| API.clean_name(x['name']) }.uniq
+  end
+  describe '.clean_name' do
+    it 'returns names of a company without special characters' do
+      names = ['Uber 072515 SF**POOL**', 'United Airlines', 'CD DEPOSIT .INITIAL.',
+               "McDonald's", 'CREDIT CARD 3333 PAYMENT *//']
+      clean = ['Uber', 'United Airlines', 'CD DEPOSIT INITIAL',
+               'McDonalds', 'CREDIT CARD PAYMENT']
+      clean_name = ->(x) { API.clean_name(x) }
+      expect(names.map(&clean_name)).to eq clean
     end
+  end
+  describe 'Clearbit integration' do
     describe '#names_to_domains' do
       it 'converts company names to domains' do
         expect(@api.domains).to be_empty
