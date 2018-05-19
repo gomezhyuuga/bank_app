@@ -1055,15 +1055,15 @@ Then it squeezes the string and finally returns the stripped version.</p>
       <pre class="lines">
 
 
-174
 175
 176
 177
 178
-179</pre>
+179
+180</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'api.rb', line 174</span>
+      <pre class="code"><span class="info file"># File 'api.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_clean_name'>clean_name</span><span class='lparen'>(</span><span class='id identifier rubyid_company_name'>company_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_company_name'>company_name</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[^A-Za-z\s]</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1150,12 +1150,12 @@ Then it squeezes the string and finally returns the stripped version.</p>
       <pre class="lines">
 
 
-129
 130
-131</pre>
+131
+132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'api.rb', line 129</span>
+      <pre class="code"><span class="info file"># File 'api.rb', line 130</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_company_info'>company_info</span><span class='lparen'>(</span><span class='id identifier rubyid_company_name'>company_name</span><span class='rparen'>)</span>
   <span class='ivar'>@companies</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_clean_name'>clean_name</span><span class='lparen'>(</span><span class='id identifier rubyid_company_name'>company_name</span><span class='rparen'>)</span><span class='rbracket'>]</span>
@@ -1199,7 +1199,6 @@ return [Array] list of of the companies</p>
       <pre class="lines">
 
 
-111
 112
 113
 114
@@ -1211,10 +1210,11 @@ return [Array] list of of the companies</p>
 120
 121
 122
-123</pre>
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'api.rb', line 111</span>
+      <pre class="code"><span class="info file"># File 'api.rb', line 112</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enrich_domains'>enrich_domains</span>
   <span class='kw'>return</span> <span class='lbrace'>{</span><span class='rbrace'>}</span> <span class='kw'>if</span> <span class='ivar'>@domains</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1260,7 +1260,6 @@ for each transaction</p>
       <pre class="lines">
 
 
-94
 95
 96
 97
@@ -1271,10 +1270,11 @@ for each transaction</p>
 102
 103
 104
-105</pre>
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'api.rb', line 94</span>
+      <pre class="code"><span class="info file"># File 'api.rb', line 95</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_fetch_domains'>fetch_domains</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='ivar'>@transactions</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1315,7 +1315,8 @@ for each transaction</p>
 70
 71
 72
-73</pre>
+73
+74</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'api.rb', line 66</span>
@@ -1323,6 +1324,7 @@ for each transaction</p>
 <span class='kw'>def</span> <span class='id identifier rubyid_fetch_transactions'>fetch_transactions</span>
   <span class='ivar'>@transactions</span> <span class='op'>=</span> <span class='ivar'>@plaid</span><span class='period'>.</span><span class='id identifier rubyid_transactions'>transactions</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='ivar'>@access_token</span><span class='comma'>,</span> <span class='int'>6</span><span class='period'>.</span><span class='id identifier rubyid_months'>months</span><span class='period'>.</span><span class='id identifier rubyid_ago'>ago</span><span class='comma'>,</span> <span class='const'>Date</span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span><span class='rparen'>)</span>
   <span class='ivar'>@transactions</span> <span class='op'>=</span> <span class='ivar'>@transactions</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>transactions</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='ivar'>@logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Fetched </span><span class='embexpr_beg'>#{</span><span class='ivar'>@transactions</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='embexpr_end'>}</span><span class='tstring_content'> transactions!</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_fetch_domains'>fetch_domains</span><span class='lparen'>(</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enrich_domains'>enrich_domains</span><span class='lparen'>(</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_find_recurring'>find_recurring</span><span class='lparen'>(</span><span class='rparen'>)</span>
@@ -1391,7 +1393,6 @@ recurring</li>
       <pre class="lines">
 
 
-143
 144
 145
 146
@@ -1412,10 +1413,11 @@ recurring</li>
 161
 162
 163
-164</pre>
+164
+165</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'api.rb', line 143</span>
+      <pre class="code"><span class="info file"># File 'api.rb', line 144</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_find_recurring'>find_recurring</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='ivar'>@transactions</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1489,16 +1491,16 @@ a sucessfully login</p>
       <pre class="lines">
 
 
-78
 79
 80
 81
 82
 83
-84</pre>
+84
+85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'api.rb', line 78</span>
+      <pre class="code"><span class="info file"># File 'api.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_generate_access_token'>generate_access_token</span><span class='lparen'>(</span><span class='id identifier rubyid_public_token'>public_token</span><span class='rparen'>)</span>
   <span class='ivar'>@public_token</span>     <span class='op'>=</span> <span class='id identifier rubyid_public_token'>public_token</span>
@@ -1556,12 +1558,12 @@ a sucessfully login</p>
       <pre class="lines">
 
 
-88
 89
-90</pre>
+90
+91</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'api.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'api.rb', line 89</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_logged_in?'>logged_in?</span>
   <span class='op'>!</span><span class='ivar'>@access_token</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1576,7 +1578,7 @@ a sucessfully login</p>
 </div>
 
       <div id="footer">
-  Generated on Sat May 19 04:36:57 2018 by
+  Generated on Sat May 19 07:22:00 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>
