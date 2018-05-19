@@ -1,1 +1,1 @@
---no-private -m markdown --protected --plugin yard-sinatra -o ./client/public/docs . - README
+--no-private -m markdown --protected --plugin yard-sinatra -o ./client/public/docs . - README.md

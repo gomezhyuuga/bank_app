@@ -6,10 +6,8 @@ Capybara.configure do |config|
   config.app_host = 'localhost:3000'
   config.app = InterviewApp
   config.default_driver = :selenium_chrome
-  config.save_path = '/Users/gomezhyuuga/'
   config.server_port = 4567
 end
-Capybara.save_path = '/Users/gomezhyuuga/'
 
 describe '/', type: :feature do
   before :each do
@@ -35,24 +33,25 @@ describe '/', type: :feature do
         click_button 'Continue'
       end
     end
-    it 'does not ask for login' do
-      expect(page).not_to have_content 'You must login'
+    it 'do not ask for login' do
+      expect(page).not_to have_content 'You must login', wait: 10
     end
     it 'shows the list of transactions' do
-      expect(page).to have_content 'Transactions'
+      expect(page).to have_content 'Loading transactions...'
+      expect(page).to have_content 'Transactions', wait: 30
+      expect(page).to have_selector '.timeline-item'
     end
-
-    describe 'selecting a transaction' do
-      it 'shows related information' do
-        find('.timeline-item', match: :first).click
-        expect(page).to have_selector '#transaction_details'
-        expect(page).to have_selector '#company_details'
-      end
+    it 'shows related information' do
+      find('.timeline-item', match: :first, wait: 30).click
+      expect(page).to have_selector '#transaction_details'
+      expect(page).to have_selector '#company_details'
     end
-    describe 'requesting more transactions' do
-      it 'loads the correct amount of transactions' do
-        expect(all('.timeline-item').length).to eq 10
-      end
+    it 'is able to load more transactions' do
+      page.assert_selector('.timeline-item', visible: false, count: 10, wait: 40)
+      click_button 'Load more'
+      page.assert_selector('.timeline-item', visible: false, count: 20, wait: 40)
+      click_button 'Load more'
+      page.assert_selector('.timeline-item', visible: false, count: 30, wait: 40)
     end
   end
 end

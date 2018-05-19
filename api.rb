@@ -66,6 +66,7 @@ class API
   def fetch_transactions
     @transactions = @plaid.transactions.get(@access_token, 6.months.ago, Date.today)
     @transactions = @transactions['transactions']
+    @logger.info "Fetched #{@transactions.length} transactions!"
     fetch_domains()
     enrich_domains()
     find_recurring()

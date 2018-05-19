@@ -23,14 +23,17 @@ class TransactionList extends Component {
             }
             return <Timeline.Item style={{background: 'none'}} key={t.transaction_id} {...options}>
                     <a onClick={this.onClick.bind(this, t)} className='timeline-item'>
-                        <Row>
+                        <Row gutter={16}>
                             <Col span={4}><small>{t.date}</small></Col>
-                            <Col span={12}>{t.name}</Col>
-                            <Col span={4} className={className}>
+                            <Col span={12} sm={10}>{t.name}</Col>
+                            <Col span={4}  sm={5} className={className}>
                                 <pre>{t.amount_str}</pre>
                             </Col>
                             <Col span={4}>
-                                <Button type='primary' size='small'>Details <Icon type="right-circle-o"/></Button>
+                                <Button type='primary' size='small'>
+                                    Details
+                                    <Icon type="right-circle-o"/>
+                                </Button>
                             </Col>
                         </Row>
                     </a>

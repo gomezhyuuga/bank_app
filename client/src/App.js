@@ -126,7 +126,7 @@ class App extends Component {
               &copy; 2018 - Fernando Gómez Herrera
             </a>
         </Header>
-        <Content style={{ paddingLeft: 50, marginRight: '50%', marginTop: 64 }}>
+        <Content style={{ padding: '0px 50px', marginRight: '50%', marginTop: 64 }}>
           <div className='content'>
             {content}
           </div>
