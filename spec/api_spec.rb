@@ -1,14 +1,17 @@
 require 'rspec'
 require 'yaml'
 require 'json'
+require 'dotenv/load'
 require_relative '../API'
 
 # Tests for the API
 describe API do
   before :context do
-    settings = YAML.load_file('config.yml')
-    @api = API.new(plaid_credentials: settings['plaid'],
-                   clearbit_key: settings['clearbit_key'])
+    plaid_settings = { secret: ENV['PLAID_SECRET'],
+                       client_id: ENV['PLAID_CLIENT_ID'],
+                       public_key: ENV['PLAID_PUBLIC_KEY'] }
+    @api = API.new(plaid_credentials: plaid_settings,
+                   clearbit_key: ENV['CLEARBIT_KEY'])
     @transactions = JSON.parse(File.read('transactions.json'))['transactions']
   end
 

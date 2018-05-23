@@ -83,3 +83,4 @@ build-iPhoneSimulator/
 # End of https://www.gitignore.io/api/macos,ruby
 .vscode/
 bin/
+.ENV

@@ -1,10 +1,10 @@
 ENV['RACK_ENV'] = 'test'
 
-require_relative '../interview_app'
+require_relative '../app'
 
 Capybara.configure do |config|
   config.app_host = 'localhost:3000'
-  config.app = InterviewApp
+  config.app = App
   config.default_driver = :selenium_chrome
   config.server_port = 4567
 end

@@ -57,35 +57,84 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'><h1 id="clearbit-interview-project">Clearbit Interview Project</h1>
-<p>Application made as part of the interview process at <a href="https://clearbit.com/">Clearbit</a>.</p>
+      <div id="content"><div id='filecontents'><h1 id="bank-account-transactions">Bank Account Transactions</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td>[[https://github.com/gomezhyuuga/gh_bankapp/blob/master/thumbnail.png</td>
+      <td>alt=Thumbnail]]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a href="https://reactjs.org/">React 16</a> &amp; <a href="http://sinatrarb.com/">Sinatra</a> application to list bank transactions using
+<a href="https://plaid.com/">Plaid</a> as account provider.</p>
+
+<p><a href="">https://gh-bankapp.herokuapp.com/</a></p>
 
 <p>It connects to the Plaid service to gather bank transactions and then
-uses Clearbit’s Enrich API to fetch more information about the company
+uses <a href="https://clearbit.com/">Clearbit’s Enrich API</a> to fetch more information about the company
 who charged the transaction.</p>
 
-<h1 id="run-server">Run server:</h1>
+<h1 id="instructions">Instructions</h1>
+<ol>
+  <li>Clone it:</li>
+</ol>
+
+<p><code>
+git clone git@github.com:gomezhyuuga/bank_app.git
+</code></p>
+
+<ol>
+  <li>Run application with:</li>
+</ol>
+
 <p><code>
 rackup -p 4567
 </code></p>
 
-<h1 id="run-client-dev">Run client (dev):</h1>
+<ol>
+  <li>Access to it: http://localhost:4567/</li>
+</ol>
+
+<h1 id="development">Development</h1>
+<p>## Run server:</p>
+
+<p><code>
+rackup -p 4567
+</code></p>
+
+<h2 id="run-client-dev">Run client (dev):</h2>
+
 <p><code>
 cd client; yarn start
 </code></p>
 
-<h1 id="unit-testing">Unit testing</h1>
-<p><strong><a href="http://rspec.info/">RSpec</a></strong> test suite for <code>api.rb</code>:
-<code>
-➜  clearbit_interview git:(master) bundle exec rspec spec/api_spec.rb
+<p>Access to the client using: http://localhost:3000</p>
+
+<h2 id="to-create-the-build-version-for-deployment-run">To create the build version for deployment, run:</h2>
+
+<p><code>
+cd client; yarn build
+</code></p>
+
+<h2 id="unit-testing">Unit testing</h2>
+
+<p><strong><a href="http://rspec.info/">RSpec</a></strong> test suite for <code>api.rb</code>:</p>
+
+<p><code>
+➜  bank_app git:(master) bundle exec rspec spec/api_spec.rb
 Finished in 8.87 seconds (files took 1.47 seconds to load)
 17 examples, 0 failures
 </code></p>
 
-<h1 id="integration-testing">Integration testing</h1>
-<p><strong><a href="http://teamcapybara.github.io/capybara/">Capybara</a></strong>  to test basic UI functionality:
-<code>
-➜  clearbit_interview git:(master) ✗ bundle exec rspec spec/integration_spec.rb
+<h2 id="integration-testing">Integration testing</h2>
+
+<p><strong><a href="http://teamcapybara.github.io/capybara/">Capybara</a></strong>  to test basic UI functionality:</p>
+
+<p><code>
+➜  bank_app git:(master) ✗ bundle exec rspec spec/integration_spec.rb
 Finished in 49.96 seconds (files took 1.24 seconds to load)
 5 examples, 0 failures
 </code></p>
@@ -93,7 +142,7 @@ Finished in 49.96 seconds (files took 1.24 seconds to load)
 </div></div>
 
       <div id="footer">
-  Generated on Sat May 19 07:22:00 2018 by
+  Generated on Tue May 22 19:02:11 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.4.0).
 </div>

@@ -6,7 +6,7 @@ const PUBLIC_KEY = "59a8fa31d49b1271a3f4cf0303d30f";
 
 const Plaid = ({handleOnSuccess, handleOnExit}) => (
     <PlaidLink
-        clientName="Clearbit Interview"
+        clientName="Bank Transactions App"
         className="ant-btn ant-btn-primary ant-btn-lg"
         style={{
             backgroundColor: '#1890ff',

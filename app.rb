@@ -2,7 +2,6 @@ require 'pry'
 require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/cors'
-require 'sinatra/config_file'
 require 'rack/contrib'
 
 require 'active_support'
@@ -11,22 +10,26 @@ require 'active_support/core_ext/integer/time'
 
 require_relative 'api'
 
-# Interview Server Controller
-class InterviewApp < Sinatra::Base
-  register Sinatra::ConfigFile
+# Main Sinatra Module Application
+class App < Sinatra::Base
   use Rack::PostBodyContentTypeParser
 
   # Settings
-  config_file 'config.yml'
   enable :sessions, :static
   set :public_folder, -> { File.join(root, 'client/build') }
   set :server, :puma
-  APP_API = API.new(plaid_credentials: settings.plaid,
-                    clearbit_key: settings.clearbit_key)
 
   configure :development do
     register Sinatra::Reloader
+    plaid_settings = { secret: ENV['PLAID_SECRET'],
+                       client_id: ENV['PLAID_CLIENT_ID'],
+                       public_key: ENV['PLAID_PUBLIC_KEY'] }
+    set :plaid, plaid_settings
+    set :clearbit_key, ENV['CLEARBIT_KEY']
   end
+
+  APP_API = API.new(plaid_credentials: settings.plaid,
+                    clearbit_key: settings.clearbit_key)
 
   before '/transactions*' do
     content_type :json

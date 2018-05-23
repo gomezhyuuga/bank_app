@@ -110,7 +110,7 @@ class App extends Component {
     return <Layout>
       <Layout>
         <Header id='header'>
-            <h2>Clearbit Interview Project</h2>
+            <h2>Bank Account Transactions</h2>
             <Divider type='vertical' />
             <a href="summary.pdf">
               <Icon type='cloud-download' className='header-icon' />

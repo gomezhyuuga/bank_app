@@ -10,6 +10,7 @@ gem 'rack-contrib'
 gem 'activesupport'
 gem 'pry-byebug'
 
+gem 'dotenv', groups: [:test, :development]
 group :test do
     gem 'rspec'
     gem 'capybara'
@@ -20,3 +21,4 @@ group :development do
     gem 'ruby-debug-ide'
     gem 'debase'
 end
+

@@ -7,6 +7,7 @@ require 'set'
 require 'active_support'
 require 'active_support/core_ext/numeric/time'
 require 'active_support/core_ext/integer/time'
+require 'active_support/hash_with_indifferent_access'
 
 require_relative 'lib/plaid/models/transaction'
 
@@ -41,9 +42,9 @@ class API
 
     Clearbit.key = clearbit_key
 
-    client_id, secret, public_key = plaid_credentials.values_at('client_id', 'secret', 'public_key')
-    @plaid = Plaid::Client.new(env: :sandbox, client_id: client_id,
-                               secret: secret, public_key: public_key)
+    plaid = plaid_credentials.symbolize_keys
+    @plaid = Plaid::Client.new(env: :sandbox, client_id: plaid[:client_id],
+                               secret: plaid[:secret], public_key: plaid[:public_key])
   end
 
   # Returns the transactions from Plaid

@@ -1,2 +1,2 @@
-require './interview_app'
-run InterviewApp
+require './app'
+run App
