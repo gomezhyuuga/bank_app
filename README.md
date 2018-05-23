@@ -5,7 +5,7 @@
 [React 16][react] & [Sinatra][sinatra] application to list bank transactions using
 [Plaid][plaid] as account provider.
 
-[https://gh-bankapp.herokuapp.com/]()
+https://gh-bankapp.herokuapp.com/
 
 It connects to the Plaid service to gather bank transactions and then
 uses [Clearbit's Enrich API][clearbit] to fetch more information about the company
