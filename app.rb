@@ -21,6 +21,8 @@ class App < Sinatra::Base
 
   configure :development do
     register Sinatra::Reloader
+  end
+  configure do
     plaid_settings = { secret: ENV['PLAID_SECRET'],
                        client_id: ENV['PLAID_CLIENT_ID'],
                        public_key: ENV['PLAID_PUBLIC_KEY'] }
