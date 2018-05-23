@@ -1,6 +1,6 @@
 # Bank Account Transactions
 
-[[https://github.com/gomezhyuuga/bank_app/raw/master/thumbnail.png]]
+![Thumbnail](https://raw.githubusercontent.com/gomezhyuuga/bank_app/master/thumbnail.png)
 
 [React 16][react] & [Sinatra][sinatra] application to list bank transactions using
 [Plaid][plaid] as account provider.
